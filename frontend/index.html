@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRAME — Camera Rental & Finance</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+  <div class="brand"><div class="brandmark">F.</div><div class="brandtext"><h2>FRAME<span style="color:var(--lime)">/</span></h2><small>RENTAL STUDIO</small></div></div>
+  <div class="navlabel">WORKSPACE</div>
+  <nav class="nav" id="nav">
+    <button class="active" data-page="dashboard"><span>◫</span><b class="navtext">Overview</b></button>
+    <button data-page="customers"><span>♙</span><b class="navtext">Pelanggan</b></button>
+    <button data-page="cameras"><span>▣</span><b class="navtext">Inventaris Kamera</b></button>
+    <button data-page="bookings"><span>◷</span><b class="navtext">Booking & Sewa</b></button>
+    <button data-page="transactions"><span>↗</span><b class="navtext">Transaksi</b></button>
+    <button data-page="accounting"><span>▤</span><b class="navtext">Pusat Akuntansi</b></button>
+  </nav>
+  <div class="sidebottom"><div class="live"><span class="dot" id="connDot"></span> <span id="connText">MENGHUBUNGKAN…</span></div><p>Workspace akuntansi dan operasional penyewaan kamera.</p></div>
+</aside>
+<main class="main">
+  <header class="top"><div><div class="eyebrow">CAMERA RENTAL / FINANCE OS</div><h1 id="pageTitle">Overview</h1></div><div class="topright"><div class="datepill" id="today"></div><div class="avatar">F.</div></div></header>
+
+  <section class="page active" id="page-dashboard">
+    <div class="hero"><div><div class="eyebrow" style="color:#405333">YOUR STUDIO, IN FOCUS</div><h2>Bisnis rapi.<br>Angka tetap tajam.</h2><p>Pantau penyewaan, arus kas, dan performa usaha dari satu tempat.</p><div style="margin-top:17px"><button class="btn" onclick="openModal('booking')">＋ Buat booking</button> <button class="btn ghost" onclick="go('accounting')">Lihat laporan ↗</button></div></div><div class="heroart">📷</div></div>
+    <div class="stats">
+      <div class="stat"><div class="stathead">TOTAL PEMASUKAN <span class="staticon">↗</span></div><strong id="sIncome">Rp0</strong><small>Transaksi pemasukan tercatat</small></div>
+      <div class="stat"><div class="stathead">TOTAL PENGELUARAN <span class="staticon">↘</span></div><strong id="sExpense">Rp0</strong><small>Operasional & biaya usaha</small></div>
+      <div class="stat"><div class="stathead">LABA / RUGI BERSIH <span class="staticon">◒</span></div><strong id="sProfit">Rp0</strong><small id="profitNote">Pemasukan dikurangi pengeluaran</small></div>
+      <div class="stat"><div class="stathead">BOOKING AKTIF <span class="staticon">◷</span></div><strong id="sBooking">0</strong><small id="sCameraNote">0 unit kamera</small></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><div class="cardhead"><div><h3>Arus keuangan</h3><p>Ringkasan pemasukan dan pengeluaran per bulan</p></div><span class="pill">6 BULAN</span></div><div id="cashChart" class="chart"></div><div class="legend"><span><i></i>Pemasukan</span><span><i class="gray"></i>Pengeluaran</span></div></div>
+      <div class="card"><div class="cardhead"><div><h3>Aktivitas terbaru</h3><p>Transaksi yang baru dicatat</p></div><button class="btn ghost small" onclick="go('transactions')">Semua ↗</button></div><div class="quicklist" id="recent"></div></div>
+    </div>
+    <div class="card" style="margin-top:15px"><div class="cardhead"><div><h3>Booking terbaru</h3><p>Status penyewaan yang perlu dipantau</p></div><button class="btn ghost small" onclick="go('bookings')">Buka booking ↗</button></div><div class="tablewrap"><table><thead><tr><th>Kode</th><th>Pelanggan</th><th>Kamera</th><th>Periode</th><th>Total</th><th>Status</th></tr></thead><tbody id="recentBookings"></tbody></table></div></div>
+  </section>
+
+  <section class="page" id="page-customers">
+    <div class="sectionhead"><div><div class="eyebrow">ENTITY 01 / RELATIONSHIP</div><h2>Direktori pelanggan</h2><p>Data pelanggan yang terhubung ke riwayat penyewaan.</p></div><button class="btn" onclick="openModal('customer')">＋ Tambah pelanggan</button></div>
+    <div class="card"><div class="tools"><input id="customerSearch" class="search" placeholder="Cari nama, email, atau nomor telepon..." oninput="renderCustomers()"><span class="pill" id="customerCount">0 PELANGGAN</span></div><div class="tablewrap"><table><thead><tr><th>Pelanggan</th><th>Kontak</th><th>Total booking</th><th>Total transaksi</th><th>Aksi</th></tr></thead><tbody id="customerTable"></tbody></table></div></div>
+  </section>
+
+  <section class="page" id="page-cameras">
+    <div class="sectionhead"><div><div class="eyebrow">ENTITY 02 / ASSET CONTROL</div><h2>Inventaris kamera</h2><p>Kelola tarif, kondisi, dan ketersediaan perangkat.</p></div><button class="btn" onclick="openModal('camera')">＋ Tambah kamera</button></div>
+    <div class="tools"><input class="search" id="cameraSearch" placeholder="Cari kamera atau merek..." oninput="renderCameras()"><select class="field" id="cameraFilter" onchange="renderCameras()"><option value="">Semua status</option><option>Tersedia</option><option>Disewa</option><option>Perawatan</option></select></div>
+    <div class="cameraGrid" id="cameraGrid"></div>
+  </section>
+
+  <section class="page" id="page-bookings">
+    <div class="sectionhead"><div><div class="eyebrow">ENTITY 03 / RENTAL OPERATIONS</div><h2>Booking & penyewaan</h2><p>Booking terhubung ke pelanggan, inventaris, dan transaksi.</p></div><button class="btn" onclick="openModal('booking')">＋ Buat booking</button></div>
+    <div class="card"><div class="tools"><input class="search" id="bookingSearch" placeholder="Cari kode, pelanggan, kamera..." oninput="renderBookings()"><select class="field" id="bookingFilter" onchange="renderBookings()"><option value="">Semua status</option><option>Menunggu</option><option>Berlangsung</option><option>Selesai</option><option>Dibatalkan</option></select></div><div class="tablewrap"><table><thead><tr><th>Kode / Tanggal</th><th>Pelanggan</th><th>Kamera</th><th>Durasi</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="bookingTable"></tbody></table></div><p class="footerhint">Saat booking disimpan, sistem otomatis membuat transaksi pemasukan berstatus tercatat. Saat status booking diubah menjadi Dibatalkan, transaksi pemasukan terkait akan dihapus.</p></div>
+  </section>
+
+  <section class="page" id="page-transactions">
+    <div class="sectionhead"><div><div class="eyebrow">ENTITY 04 / GENERAL LEDGER INPUT</div><h2>Buku transaksi</h2><p>Semua pemasukan dan pengeluaran untuk laporan keuangan.</p></div><button class="btn" onclick="openModal('transaction')">＋ Catat transaksi</button></div>
+    <div class="stats">
+      <div class="stat"><div class="stathead">PEMASUKAN</div><strong id="tIncome">Rp0</strong><small>Semua transaksi pemasukan</small></div>
+      <div class="stat"><div class="stathead">PENGELUARAN</div><strong id="tExpense">Rp0</strong><small>Semua transaksi pengeluaran</small></div>
+      <div class="stat"><div class="stathead">SELISIH</div><strong id="tNet">Rp0</strong><small>Net cash movement</small></div>
+      <div class="stat"><div class="stathead">JUMLAH CATATAN</div><strong id="tCount">0</strong><small>Baris transaksi</small></div>
+    </div>
+    <div class="card"><div class="tools"><input class="search" id="transactionSearch" placeholder="Cari kategori, catatan, kode..." oninput="renderTransactions()"><select class="field" id="transactionTypeFilter" onchange="renderTransactions()"><option value="">Semua jenis</option><option>Pemasukan</option><option>Pengeluaran</option></select><select class="field" id="transactionCategoryFilter" onchange="renderTransactions()"><option value="">Semua kategori</option><option>Pendapatan sewa</option><option>Perawatan</option><option>Perlengkapan</option><option>Transportasi</option><option>Utilitas</option><option>Lainnya</option></select><button class="btn ghost" onclick="exportCSV()">⇩ Export CSV</button></div><div class="tablewrap"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Kategori / Akun</th><th>Keterangan</th><th>Relasi booking</th><th>Nominal</th><th>Aksi</th></tr></thead><tbody id="transactionTable"></tbody></table></div></div>
+  </section>
+
+  <section class="page" id="page-accounting">
+    <div class="sectionhead"><div><div class="eyebrow">FINANCE / REPORTING SUITE</div><h2>Pusat akuntansi</h2><p>Laporan laba rugi, ringkasan akun, dan arus kas berdasarkan buku transaksi.</p></div><div class="tools" style="margin:0"><input class="field" id="reportFrom" type="date" onchange="renderAccounting()"><input class="field" id="reportTo" type="date" onchange="renderAccounting()"><button class="btn ghost" onclick="exportCSV()">⇩ Export</button></div></div>
+    <div class="stats"><div class="stat"><div class="stathead">PENDAPATAN</div><strong id="aIncome">Rp0</strong><small>Dalam periode laporan</small></div><div class="stat"><div class="stathead">BEBAN</div><strong id="aExpense">Rp0</strong><small>Dalam periode laporan</small></div><div class="stat"><div class="stathead">LABA BERSIH</div><strong id="aProfit">Rp0</strong><small>Pendapatan − beban</small></div><div class="stat"><div class="stathead">MARGIN LABA</div><strong id="aMargin">0%</strong><small>Laba bersih / pendapatan</small></div></div>
+    <div class="financeGrid">
+      <div class="financebox"><h3>◫ LAPORAN LABA RUGI</h3><div class="finrow"><span>Pendapatan sewa & lainnya</span><strong id="plIncome">Rp0</strong></div><div class="finrow"><span>Beban operasional</span><strong id="plExpense">Rp0</strong></div><div class="finrow total"><span>Laba / (Rugi) bersih</span><strong id="plProfit">Rp0</strong></div></div>
+      <div class="financebox dark"><h3>↗ RINGKASAN ARUS KAS</h3><div class="finrow"><span>Kas masuk</span><strong id="cfIn">Rp0</strong></div><div class="finrow"><span>Kas keluar</span><strong id="cfOut">Rp0</strong></div><div class="finrow total"><span>Arus kas bersih</span><strong id="cfNet">Rp0</strong></div></div>
+      <div class="card" style="box-shadow:none"><div class="cardhead"><div><h3>Ringkasan per kategori</h3><p>Komposisi transaksi sesuai periode</p></div></div><div id="categoryBreakdown"></div></div>
+      <div class="card" style="box-shadow:none"><div class="cardhead"><div><h3>Catatan akuntansi</h3><p>Kontrol kualitas data</p></div></div><div class="quicklist" id="accountingNotes"></div></div>
+    </div>
+    <div class="card" style="margin-top:15px"><div class="cardhead"><div><h3>Jurnal transaksi</h3><p>Daftar kronologis untuk periode terpilih</p></div></div><div class="tablewrap"><table><thead><tr><th>Tanggal</th><th>Referensi</th><th>Akun / Kategori</th><th>Debit (Rp)</th><th>Kredit (Rp)</th></tr></thead><tbody id="journalTable"></tbody></table></div><p class="footerhint">Catatan: ini adalah laporan kas sederhana berbasis transaksi (single-entry), bukan jurnal berpasangan debit-kredit yang tervalidasi. Untuk akuntansi double-entry penuh diperlukan entitas akun dan jurnal tambahan.</p></div>
+  </section>
+</main>
+</div>
+
+<div class="modal" id="modal"><div class="modalbox"><div class="modalhead"><div><div class="eyebrow" id="modalEyebrow">DATA BARU</div><h2 id="modalTitle">Tambah data</h2></div><button class="close" onclick="closeModal()">×</button></div><div id="modalBody"></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
