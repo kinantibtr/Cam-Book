@@ -1,5 +1,7 @@
 # FRAME — Camera Rental & Finance
 
+Akses Link: https://kinantibtr.github.io/Cam-Book/
+
 Aplikasi manajemen penyewaan kamera + akuntansi sederhana (pelanggan, inventaris, booking, buku transaksi, laporan laba rugi & arus kas).
 Frontend HTML/CSS/JS murni, data tersimpan di **Supabase (PostgreSQL)**.
 
